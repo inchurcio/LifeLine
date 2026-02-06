@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+.venv/
+
+# Environment variables
+.env
+
+# Cleanup folder (User requested separation)
+unnecessary_files/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor directories
+.vscode/
+.idea/
