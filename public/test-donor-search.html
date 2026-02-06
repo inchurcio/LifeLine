@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Test Donor Search</title>
+</head>
+
+<body>
+    <h1>Test Donor Search API</h1>
+    <button onclick="testSearch()">Test AB+ in Mirpur Model</button>
+    <pre id="result"></pre>
+
+    <script>
+        async function testSearch() {
+            const resultEl = document.getElementById('result');
+            resultEl.textContent = 'Testing...';
+
+            try {
+                // Test 1: Get Thana ID for Mirpur Model
+                const locationRes = await fetch('/api/locations/thanas/1');
+                const locationData = await locationRes.json();
+
+                const mirpurModel = locationData.thanas.find(t => t.name === 'Mirpur Model');
+
+                if (!mirpurModel) {
+                    resultEl.textContent = 'ERROR: Mirpur Model not found in thanas!';
+                    return;
+                }
+
+                resultEl.textContent = `Found Mirpur Model: ID = ${mirpurModel.id}\n\n`;
+
+                // Test 2: Check available donors
+                const token = localStorage.getItem('token');
+                const donorRes = await fetch(
+                    `/api/requests/available-donors?blood_type=AB%2B&zilla_id=1&thana_id=${mirpurModel.id}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
+                );
+                const donorData = await donorRes.json();
+
+                resultEl.textContent += `API Response:\n${JSON.stringify(donorData, null, 2)}`;
+
+            } catch (error) {
+                resultEl.textContent = `ERROR: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+
+</html>
